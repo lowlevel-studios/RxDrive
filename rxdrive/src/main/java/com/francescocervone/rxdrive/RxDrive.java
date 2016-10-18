@@ -167,11 +167,11 @@ public class RxDrive {
      *
      * @return an Observable with the list of the resources
      */
-    public Observable<List<DriveId>> listChildren(final DriveFolder driveFolder) {
-        return Observable.defer(new Func0<Observable<List<DriveId>>>() {
+    public Observable<List<Metadata>> listChildren(final DriveFolder driveFolder) {
+        return Observable.defer(new Func0<Observable<List<Metadata>>>() {
             @Override
-            public Observable<List<DriveId>> call() {
-                List<DriveId> list = new ArrayList<>();
+            public Observable<List<Metadata>> call() {
+                List<Metadata> list = new ArrayList<>();
 
                 DriveApi.MetadataBufferResult result = driveFolder.listChildren(mClient).await();
 
@@ -179,7 +179,7 @@ public class RxDrive {
                     MetadataBuffer buffer = result.getMetadataBuffer();
 
                     for (Metadata m : buffer) {
-                        list.add(m.getDriveId());
+                        list.add(m);
                     }
 
                     buffer.release();
@@ -198,11 +198,11 @@ public class RxDrive {
      * @param driveResource
      * @return the list of the parents
      */
-    public Observable<List<DriveId>> listParents(final DriveResource driveResource) {
-        return Observable.defer(new Func0<Observable<List<DriveId>>>() {
+    public Observable<List<Metadata>> listParents(final DriveResource driveResource) {
+        return Observable.defer(new Func0<Observable<List<Metadata>>>() {
             @Override
-            public Observable<List<DriveId>> call() {
-                List<DriveId> list = new ArrayList<>();
+            public Observable<List<Metadata>> call() {
+                List<Metadata> list = new ArrayList<>();
 
                 DriveApi.MetadataBufferResult result = driveResource.listParents(mClient).await();
 
@@ -210,7 +210,7 @@ public class RxDrive {
                     MetadataBuffer buffer = result.getMetadataBuffer();
 
                     for (Metadata m : buffer) {
-                        list.add(m.getDriveId());
+                        list.add(m);
                     }
 
                     buffer.release();

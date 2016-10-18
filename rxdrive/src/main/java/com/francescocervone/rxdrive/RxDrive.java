@@ -167,23 +167,14 @@ public class RxDrive {
      *
      * @return an Observable with the list of the resources
      */
-    public Observable<List<Metadata>> listChildren(final DriveFolder driveFolder) {
-        return Observable.defer(new Func0<Observable<List<Metadata>>>() {
+    public Observable<MetadataBuffer> listChildren(final DriveFolder driveFolder) {
+        return Observable.defer(new Func0<Observable<MetadataBuffer>>() {
             @Override
-            public Observable<List<Metadata>> call() {
-                List<Metadata> list = new ArrayList<>();
-
+            public Observable<MetadataBuffer> call() {
                 DriveApi.MetadataBufferResult result = driveFolder.listChildren(mClient).await();
 
                 if (result.getStatus().isSuccess()) {
-                    MetadataBuffer buffer = result.getMetadataBuffer();
-
-                    for (Metadata m : buffer) {
-                        list.add(m);
-                    }
-
-                    buffer.release();
-                    return Observable.just(list);
+                    return Observable.just(result.getMetadataBuffer());
                 } else {
                     return Observable.error(new RxDriveException(result.getStatus()));
                 }
@@ -198,23 +189,14 @@ public class RxDrive {
      * @param driveResource
      * @return the list of the parents
      */
-    public Observable<List<Metadata>> listParents(final DriveResource driveResource) {
-        return Observable.defer(new Func0<Observable<List<Metadata>>>() {
+    public Observable<MetadataBuffer> listParents(final DriveResource driveResource) {
+        return Observable.defer(new Func0<Observable<MetadataBuffer>>() {
             @Override
-            public Observable<List<Metadata>> call() {
-                List<Metadata> list = new ArrayList<>();
-
+            public Observable<MetadataBuffer> call() {
                 DriveApi.MetadataBufferResult result = driveResource.listParents(mClient).await();
 
                 if (result.getStatus().isSuccess()) {
-                    MetadataBuffer buffer = result.getMetadataBuffer();
-
-                    for (Metadata m : buffer) {
-                        list.add(m);
-                    }
-
-                    buffer.release();
-                    return Observable.just(list);
+                    return Observable.just(result.getMetadataBuffer());
                 } else {
                     return Observable.error(new RxDriveException(result.getStatus()));
                 }
@@ -250,25 +232,16 @@ public class RxDrive {
      * @param query the query you want to submit
      * @return
      */
-    public Observable<List<DriveId>> query(final Query query) {
-        return Observable.defer(new Func0<Observable<List<DriveId>>>() {
+    public Observable<MetadataBuffer> query(final Query query) {
+        return Observable.defer(new Func0<Observable<MetadataBuffer>>() {
             @Override
-            public Observable<List<DriveId>> call() {
-                List<DriveId> list = new ArrayList<>();
-
+            public Observable<MetadataBuffer> call() {
                 DriveApi.MetadataBufferResult result = Drive.DriveApi
                         .query(mClient, query)
                         .await();
 
                 if (result.getStatus().isSuccess()) {
-                    MetadataBuffer buffer = result.getMetadataBuffer();
-
-                    for (Metadata metadata : buffer) {
-                        list.add(metadata.getDriveId());
-                    }
-
-                    buffer.release();
-                    return Observable.just(list);
+                    return Observable.just(result.getMetadataBuffer());
                 } else {
                     return Observable.error(new RxDriveException(result.getStatus()));
                 }
@@ -282,24 +255,16 @@ public class RxDrive {
      * @param query Drive query
      * @return an Observable with the list of the resources
      */
-    public Observable<List<DriveId>> queryChildren(final DriveFolder driveFolder, final Query query) {
-        return Observable.defer(new Func0<Observable<List<DriveId>>>() {
+    public Observable<MetadataBuffer> queryChildren(final DriveFolder driveFolder, final Query query) {
+        return Observable.defer(new Func0<Observable<MetadataBuffer>>() {
             @Override
-            public Observable<List<DriveId>> call() {
-                List<DriveId> list = new ArrayList<>();
+            public Observable<MetadataBuffer> call() {
                 DriveApi.MetadataBufferResult result = driveFolder
                         .queryChildren(mClient, query)
                         .await();
 
                 if (result.getStatus().isSuccess()) {
-                    MetadataBuffer buffer = result.getMetadataBuffer();
-
-                    for (Metadata metadata : buffer) {
-                        list.add(metadata.getDriveId());
-                    }
-
-                    buffer.release();
-                    return Observable.just(list);
+                    return Observable.just(result.getMetadataBuffer());
                 } else {
                     return Observable.error(new RxDriveException(result.getStatus()));
                 }

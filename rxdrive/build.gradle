@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/francescocervone/RxDrive'
     gitUrl = 'https://github.com/francescocervone/RxDrive.git'
 
-    libraryVersion = '0.1.1'
+    libraryVersion = '0.2'
 
     developerId = 'francescocervone'
     developerName = 'Francesco Cervone'
@@ -25,14 +25,14 @@ ext {
 }
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion rootProject.ext.compileSdk
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 24
-        versionCode 2
-        versionName "0.1.1"
+        minSdkVersion rootProject.ext.minSdk
+        targetSdkVersion rootProject.ext.targetSdk
+        versionCode 3
+        versionName "0.2"
     }
     buildTypes {
         release {
@@ -41,7 +41,9 @@ android {
         }
     }
     lintOptions {
-        abortOnError false
+        textReport true
+        textOutput 'stdout'
+        abortOnError true
     }
 }
 
@@ -54,9 +56,8 @@ if (JavaVersion.current().isJava8Compatible()) {
 }
 
 dependencies {
-    compile 'io.reactivex:rxjava:1.1.0'
-    compile 'commons-io:commons-io:2.4'
-    compile 'com.google.android.gms:play-services-drive:9.6.1'
+    compile 'io.reactivex:rxjava:1.2.10'
+    compile 'com.google.android.gms:play-services-drive:10.2.4'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 }

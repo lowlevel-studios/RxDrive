@@ -5,11 +5,10 @@ jdk:
 
 android:
     components:
-        - platform-tools
         - tools
-        
-        - build-tools-24.0.2
-        - android-24
+        - android-25
+        - build-tools-25.0.3
+        - platform-tools
         - extra-android-m2repository
         - extra-android-support
         - extra-google-google_play_services
@@ -18,7 +17,7 @@ android:
 before_script:
    - echo "sdk.dir=$ANDROID_HOME" > local.properties
 script:
-   - ./gradlew check --info --stacktrace
+   - ./gradlew check
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock

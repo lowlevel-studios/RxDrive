@@ -28,18 +28,19 @@ import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.drive.query.Query;
 
+import org.reactivestreams.Subscriber;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import rx.Completable;
-import rx.Observable;
-import rx.Single;
-import rx.Subscriber;
-import rx.functions.Action0;
-import rx.subjects.PublishSubject;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.functions.Action;
+import io.reactivex.subjects.PublishSubject;
 
 public class RxDrive {
 
@@ -211,9 +212,9 @@ public class RxDrive {
      * @return true if the operation succeeds
      */
     public Completable setParents(final DriveResource driveResource, final Set<DriveId> parents) {
-        return Completable.fromAction(new Action0() {
+        return Completable.fromAction(new Action() {
             @Override
-            public void call() {
+            public void run() {
                 Status status = driveResource.setParents(mClient, parents).await();
                 if (!status.isSuccess()) {
                     throw new RxDriveException(status);
@@ -505,9 +506,9 @@ public class RxDrive {
      * @return an Observable with `true` if the resource is removed
      */
     public Completable delete(final DriveResource driveResource) {
-        return Completable.fromAction(new Action0() {
+        return Completable.fromAction(new Action() {
             @Override
-            public void call() {
+            public void run() {
                 Status status = driveResource.delete(mClient).await();
                 if (!status.isSuccess()) {
                     throw new RxDriveException(status);
@@ -523,9 +524,9 @@ public class RxDrive {
      * @return true if the operation succeeds
      */
     public Completable trash(final DriveResource driveResource) {
-        return Completable.fromAction(new Action0() {
+        return Completable.fromAction(new Action() {
             @Override
-            public void call() {
+            public void run() {
                 Status status = driveResource.trash(mClient).await();
                 if (!status.isSuccess()) {
                     throw new RxDriveException(status);
@@ -541,9 +542,9 @@ public class RxDrive {
      * @return true if the operation succeeds
      */
     public Completable untrash(final DriveResource driveResource) {
-        return Completable.fromAction(new Action0() {
+        return Completable.fromAction(new Action() {
             @Override
-            public void call() {
+            public void run() {
                 Status status = driveResource.untrash(mClient).await();
                 if (!status.isSuccess()) {
                     throw new RxDriveException(status);
@@ -558,9 +559,9 @@ public class RxDrive {
      * @return nothing
      */
     public Completable sync() {
-        return Completable.fromAction(new Action0() {
+        return Completable.fromAction(new Action() {
             @Override
-            public void call() {
+            public void run() {
                 Drive.DriveApi.requestSync(mClient).await();
             }
         });
@@ -625,7 +626,7 @@ public class RxDrive {
                         .await();
                 if (result.getStatus().isSuccess()) {
                     if (progressSubscriber != null) {
-                        progressSubscriber.onCompleted();
+                        progressSubscriber.onComplete();
                     }
                     return result.getDriveContents().getInputStream();
                 } else {

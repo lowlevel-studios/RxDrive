@@ -31,8 +31,6 @@ import com.google.android.gms.drive.query.Query;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -168,9 +166,9 @@ public class RxDrive {
      * @return an Observable with the list of the resources
      */
     public Single<MetadataBuffer> listChildren(final DriveFolder driveFolder) {
-        return Single.fromCallable(new Func0<Single<MetadataBuffer>>() {
+        return Single.fromCallable(new Callable<MetadataBuffer>() {
             @Override
-            public Single<MetadataBuffer> call() {
+            public MetadataBuffer call() {
                 DriveApi.MetadataBufferResult result = driveFolder.listChildren(mClient).await();
 
                 if (result.getStatus().isSuccess()) {
@@ -190,9 +188,9 @@ public class RxDrive {
      * @return the list of the parents
      */
     public Single<MetadataBuffer> listParents(final DriveResource driveResource) {
-        return Single.fromCallable(new Func0<Single<MetadataBuffer>>() {
+        return Single.fromCallable(new Callable<MetadataBuffer>() {
             @Override
-            public Single<MetadataBuffer> call() {
+            public MetadataBuffer call() {
                 DriveApi.MetadataBufferResult result = driveResource.listParents(mClient).await();
 
                 if (result.getStatus().isSuccess()) {
@@ -231,9 +229,9 @@ public class RxDrive {
      * @return
      */
     public Single<MetadataBuffer> query(final Query query) {
-        return Single.fromCallable(new Func0<Single<MetadataBuffer>>() {
+        return Single.fromCallable(new Callable<MetadataBuffer>() {
             @Override
-            public Single<MetadataBuffer> call() {
+            public MetadataBuffer call() {
                 DriveApi.MetadataBufferResult result = Drive.DriveApi
                         .query(mClient, query)
                         .await();
@@ -254,9 +252,9 @@ public class RxDrive {
      * @return an Observable with the list of the resources
      */
     public Single<MetadataBuffer> queryChildren(final DriveFolder driveFolder, final Query query) {
-        return Single.fromCallable(new Func0<Single<MetadataBuffer>>() {
+        return Single.fromCallable(new Callable<MetadataBuffer>() {
             @Override
-            public Single<MetadataBuffer> call() {
+            public MetadataBuffer call() {
                 DriveApi.MetadataBufferResult result = driveFolder
                         .queryChildren(mClient, query)
                         .await();

@@ -17,6 +17,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.Metadata;
+import com.google.android.gms.drive.MetadataBuffer;
 
 import java.util.List;
 
@@ -119,10 +120,15 @@ public class MainActivity extends AppCompatActivity implements DriveFileAdapter.
     private void list() {
         mRxDrive.listChildren(mRxDrive.getAppFolder())
                 .subscribeOn(Schedulers.io())
-                .flatMapObservable(new Func1<List<DriveId>, Observable<DriveId>>() {
+                .flatMapObservable(new Func1<MetadataBuffer, Observable<DriveId>>() {
                     @Override
-                    public Observable<DriveId> call(List<DriveId> driveIds) {
-                        return Observable.from(driveIds);
+                    public Observable<DriveId> call(MetadataBuffer buffer) {
+                        return Observable.from(buffer).map(new Func1<Metadata, DriveId>() {
+                            @Override
+                            public DriveId call(Metadata metadata) {
+                                return metadata.getDriveId();
+                            }
+                        });
                     }
                 })
                 .flatMap(new Func1<DriveId, Observable<Metadata>>() {
